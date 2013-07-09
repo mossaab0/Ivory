@@ -42,10 +42,10 @@ public class StanfordChineseTokenizer extends Tokenizer {
 
     try {
       classifier = new CRFClassifier(props);
-      FSDataInputStream in = fs.open(new Path(conf.get(Constants.TokenizerData) + "/pku"));
+      FSDataInputStream in = fs.open(new Path(conf.get(Constants.TokenizerData) + "/ctb"));
       FSDataInputStream inDict = fs.open(new Path(conf.get(Constants.TokenizerData) + "/dict-chris6.ser"));
       classifier.loadClassifier(in, props);
-      classifier.flags.setConf(conf);
+      classifier.flags.setProperties(props);
       readerWriter = classifier.makeReaderAndWriter(inDict);
     } catch (Exception e) {
       e.printStackTrace();
