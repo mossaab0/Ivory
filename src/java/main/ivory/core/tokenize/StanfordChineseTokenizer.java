@@ -36,14 +36,14 @@ public class StanfordChineseTokenizer extends Tokenizer {
   public void configure(Configuration conf, FileSystem fs) {
     Properties props = new Properties();
     props.setProperty("sighanCorporaDict", conf.get(Constants.TokenizerData));
-    props.setProperty("serDictionary", conf.get(Constants.TokenizerData) + "/dict-chris6.ser");
+    props.setProperty("serDictionary", conf.get(Constants.TokenizerData) + "/dict-chris6.ser.gz");
     props.setProperty("inputEncoding", "UTF-8");
     props.setProperty("sighanPostProcessing", "true");
 
     try {
       classifier = new CRFClassifier(props);
-      FSDataInputStream in = fs.open(new Path(conf.get(Constants.TokenizerData) + "/ctb"));
-      FSDataInputStream inDict = fs.open(new Path(conf.get(Constants.TokenizerData) + "/dict-chris6.ser"));
+      FSDataInputStream in = fs.open(new Path(conf.get(Constants.TokenizerData) + "/ctb.gz"));
+      FSDataInputStream inDict = fs.open(new Path(conf.get(Constants.TokenizerData) + "/dict-chris6.ser.gz"));
       classifier.loadClassifier(in, props);
       classifier.flags.setProperties(props);
       readerWriter = classifier.makeReaderAndWriter(inDict);
