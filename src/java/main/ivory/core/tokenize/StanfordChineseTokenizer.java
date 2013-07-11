@@ -9,12 +9,13 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Logger;
 import edu.stanford.nlp.ie.crf.CRFClassifier;
+import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.sequences.DocumentReaderAndWriter;
 
 public class StanfordChineseTokenizer extends Tokenizer {
   private static final Logger LOG = Logger.getLogger(StanfordChineseTokenizer.class);
 
-  CRFClassifier classifier;
+  CRFClassifier<CoreLabel> classifier;
   DocumentReaderAndWriter readerWriter;
 
   public StanfordChineseTokenizer() {
@@ -36,14 +37,14 @@ public class StanfordChineseTokenizer extends Tokenizer {
   public void configure(Configuration conf, FileSystem fs) {
     Properties props = new Properties();
     props.setProperty("sighanCorporaDict", conf.get(Constants.TokenizerData));
-    props.setProperty("serDictionary", conf.get(Constants.TokenizerData) + "/dict-chris6.ser.gz");
+    props.setProperty("serDictionary", conf.get(Constants.TokenizerData) + "/dict-chris6.ser");
     props.setProperty("inputEncoding", "UTF-8");
     props.setProperty("sighanPostProcessing", "true");
 
     try {
-      classifier = new CRFClassifier(props);
-      FSDataInputStream in = fs.open(new Path(conf.get(Constants.TokenizerData) + "/ctb.gz"));
-      FSDataInputStream inDict = fs.open(new Path(conf.get(Constants.TokenizerData) + "/dict-chris6.ser.gz"));
+      classifier = new CRFClassifier<CoreLabel>(props);
+      FSDataInputStream in = fs.open(new Path(conf.get(Constants.TokenizerData) + "/ctb"));
+      FSDataInputStream inDict = fs.open(new Path(conf.get(Constants.TokenizerData) + "/dict-chris6.ser"));
       classifier.loadClassifier(in, props);
       classifier.flags.setProperties(props);
       readerWriter = classifier.makeReaderAndWriter(inDict);
