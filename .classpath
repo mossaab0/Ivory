@@ -86,7 +86,6 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/snappy-java-1.0.4.1.jar"/>
-	<classpathentry kind="lib" path="lib/stanford-chinese-segmenter-2011-09-14-ivory.jar"/>
 	<classpathentry kind="lib" path="lib/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/sux4j-3.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/tools-1.5.0.jar"/>
@@ -113,5 +112,6 @@
 	<classpathentry kind="lib" path="lib/hadoop-yarn-server-web-proxy-2.0.0-cdh4.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/xz-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="lib/stanford-chinese-segmenter-2013-06-20.jar" sourcepath="/home/mossaab/Downloads/stanford-segmenter-2013-06-20/stanford-segmenter-3.2.0-sources.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

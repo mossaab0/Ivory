@@ -2,6 +2,9 @@ package ivory.core.tokenize;
 
 import ivory.core.Constants;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.List;
 import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -16,7 +19,7 @@ public class StanfordChineseTokenizer extends Tokenizer {
   private static final Logger LOG = Logger.getLogger(StanfordChineseTokenizer.class);
 
   CRFClassifier<CoreLabel> classifier;
-  DocumentReaderAndWriter readerWriter;
+  DocumentReaderAndWriter<CoreLabel> readerWriter;
 
   public StanfordChineseTokenizer() {
     super();
@@ -37,17 +40,16 @@ public class StanfordChineseTokenizer extends Tokenizer {
   public void configure(Configuration conf, FileSystem fs) {
     Properties props = new Properties();
     props.setProperty("sighanCorporaDict", conf.get(Constants.TokenizerData));
-    props.setProperty("serDictionary", conf.get(Constants.TokenizerData) + "/dict-chris6.ser");
+    props.setProperty("serDictionary", conf.get(Constants.TokenizerData) + "/dict-chris6.ser.gz");
     props.setProperty("inputEncoding", "UTF-8");
     props.setProperty("sighanPostProcessing", "true");
 
     try {
       classifier = new CRFClassifier<CoreLabel>(props);
       FSDataInputStream in = fs.open(new Path(conf.get(Constants.TokenizerData) + "/ctb"));
-      FSDataInputStream inDict = fs.open(new Path(conf.get(Constants.TokenizerData) + "/dict-chris6.ser"));
       classifier.loadClassifier(in, props);
       classifier.flags.setProperties(props);
-      readerWriter = classifier.makeReaderAndWriter(inDict);
+      readerWriter = classifier.makeReaderAndWriter();
     } catch (Exception e) {
       e.printStackTrace();
       throw new RuntimeException("Tokenizer not configured properly!");
@@ -58,8 +60,13 @@ public class StanfordChineseTokenizer extends Tokenizer {
   public String[] processContent(String text) {
     String[] tokens = null;
     try {
-      text = postNormalize(preNormalize(text).toLowerCase());      // normalization for non-Chinese characters
-      tokens = classifier.classifyStringAndReturnAnswers(text, readerWriter);
+      text = postNormalize(preNormalize(text).toLowerCase()); // normalization for non-Chinese
+                                                              // characters
+      StringWriter sw = new StringWriter();
+      for (List<CoreLabel> doc : classifier.classify(text)) {
+        classifier.writeAnswers(doc, new PrintWriter(sw), readerWriter);
+      }
+      tokens = sw.toString().trim().split("\\s+");
     } catch (IOException e) {
       LOG.info("Problem in tokenizing Chinese");
       e.printStackTrace();
@@ -69,8 +76,10 @@ public class StanfordChineseTokenizer extends Tokenizer {
     } else {
       StringBuilder finalTokenized = new StringBuilder();
       for (String token : tokens) {
-        if ( vocab.get(token) <= 0) { continue; }
-        finalTokenized.append( token + " " );
+        if (vocab.get(token) <= 0) {
+          continue;
+        }
+        finalTokenized.append(token + " ");
       }
       return finalTokenized.toString().trim().split("\\s+");
     }
