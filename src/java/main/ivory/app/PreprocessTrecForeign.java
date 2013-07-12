@@ -40,6 +40,8 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
+import org.mortbay.log.Log;
+
 import edu.umd.cloud9.collection.trec.TrecDocnoMapping;
 import edu.umd.cloud9.collection.trec.TrecDocnoMappingBuilder;
 import edu.umd.cloud9.collection.trec.TrecDocumentInputFormat;
@@ -60,6 +62,8 @@ public class PreprocessTrecForeign extends Configured implements Tool {
     RetrievalEnvironment env = new RetrievalEnvironment(indexRootPath, fs);
     Path mappingFile = env.getDocnoMappingData();
     new TrecDocnoMappingBuilder().build(new Path(collection), mappingFile, conf);
+    
+    Log.info("TrecDocnoMappingBuilder Fineshed. Loading conf...");
 
     conf.set(Constants.DocnoMappingClass, TrecDocnoMapping.class.getCanonicalName());
     conf.set(Constants.DocnoMappingFile, env.getDocnoMappingData().toString());
@@ -73,13 +77,15 @@ public class PreprocessTrecForeign extends Configured implements Tool {
     conf.set("mapreduce.reduce.memory.mb", "3072");
     conf.set("mapreduce.reduce.java.opts", "-Xmx3072m");
 
-    new BuildTermDocVectors(conf).run();
+    Log.info("Conf loaded...");
+
+    /*new BuildTermDocVectors(conf).run();
     new ComputeGlobalTermStatistics(conf).run();
     new BuildDictionary(conf).run();
     new BuildIntDocVectors(conf).run();
 
     new BuildIntDocVectorsForwardIndex(conf).run();
-    new BuildTermDocVectorsForwardIndex(conf).run();
+    new BuildTermDocVectorsForwardIndex(conf).run();*/
 
     return 0;
   }
