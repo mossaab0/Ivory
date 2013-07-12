@@ -59,9 +59,17 @@ import edu.umd.cloud9.util.map.MapII;
 public class BuildTermDocVectors extends PowerTool {
   private static final Logger LOG = Logger.getLogger(BuildTermDocVectors.class);
 
-  protected static enum Docs { Skipped, Total, Empty }
-  protected static enum MapTime { Spilling, Parsing }
-  protected static enum DocLengths { Count, SumOfDocLengths, Files }
+  protected static enum Docs {
+    Skipped, Total, Empty
+  }
+
+  protected static enum MapTime {
+    Spilling, Parsing
+  }
+
+  protected static enum DocLengths {
+    Count, SumOfDocLengths, Files
+  }
 
   protected static class MyMapper extends Mapper<Writable, Indexable, IntWritable, TermDocVector> {
     private static final IntWritable key = new IntWritable();
@@ -79,13 +87,13 @@ public class BuildTermDocVectors extends PowerTool {
 
       try {
         FileSystem localFs = FileSystem.getLocal(conf);
-        docMapping =
-          (DocnoMapping) Class.forName(conf.get(Constants.DocnoMappingClass)).newInstance();
+        docMapping = (DocnoMapping) Class.forName(conf.get(Constants.DocnoMappingClass))
+            .newInstance();
 
         // Take a different code path if we're in standalone mode.
         if (conf.get("mapred.job.tracker").equals("local")) {
-          RetrievalEnvironment env = new RetrievalEnvironment(
-              context.getConfiguration().get(Constants.IndexPath), localFs);
+          RetrievalEnvironment env = new RetrievalEnvironment(context.getConfiguration().get(
+              Constants.IndexPath), localFs);
           docMapping.loadMapping(env.getDocnoMappingData(), localFs);
         } else {
           Path[] localFiles = DistributedCache.getLocalCacheFiles(conf);
@@ -107,8 +115,8 @@ public class BuildTermDocVectors extends PowerTool {
     }
 
     @Override
-    public void map(Writable in, Indexable doc, Context context)
-        throws IOException, InterruptedException {
+    public void map(Writable in, Indexable doc, Context context) throws IOException,
+        InterruptedException {
       docno = docMapping.getDocno(doc.getDocid());
 
       // Skip invalid docnos.
@@ -120,8 +128,8 @@ public class BuildTermDocVectors extends PowerTool {
       long startTime;
 
       startTime = System.currentTimeMillis();
-      Map<String, ArrayListOfInts> termPositionsMap =
-          DocumentProcessingUtils.parseDocument(doc, tokenizer);
+      Map<String, ArrayListOfInts> termPositionsMap = DocumentProcessingUtils.parseDocument(doc,
+          tokenizer);
       context.getCounter(MapTime.Parsing).increment(System.currentTimeMillis() - startTime);
 
       int doclength;
@@ -145,7 +153,7 @@ public class BuildTermDocVectors extends PowerTool {
 
     @Override
     public void cleanup(Mapper<Writable, Indexable, IntWritable, TermDocVector>.Context context)
-          throws IOException, InterruptedException {
+        throws IOException, InterruptedException {
       // Now we want to write out the doclengths as "side data" onto HDFS.
       // Since speculative execution is on, we'll append the task id to
       // the filename to guarantee uniqueness. However, this means that
@@ -223,7 +231,7 @@ public class BuildTermDocVectors extends PowerTool {
         FileStatus[] fileStats = fs.listStatus(p);
 
         int[] doclengths = new int[collectionDocCount + 1]; // Initial array to hold the doclengths.
-        int maxDocno = 0;                 // Largest docno.
+        int maxDocno = 0; // Largest docno.
         int minDocno = Integer.MAX_VALUE; // Smallest docno.
 
         int nFiles = fileStats.length;
@@ -252,10 +260,10 @@ public class BuildTermDocVectors extends PowerTool {
             }
 
             if (docno - docnoOffset >= doclengths.length) {
-              throw new RuntimeException("Error: docno - docnoOffset " + (docno - docnoOffset) 
+              throw new RuntimeException("Error: docno - docnoOffset " + (docno - docnoOffset)
                   + " >= collectionDocCount " + collectionDocCount + "!");
             }
-            
+
             doclengths[docno - docnoOffset] = len;
 
             if (docno > maxDocno) {
@@ -299,14 +307,9 @@ public class BuildTermDocVectors extends PowerTool {
   private static final String InputPath = "Ivory.InputPath";
   private static final String DocLengthDataFile = "Ivory.DocLengthDataFile";
 
-  public static final String[] RequiredParameters = {
-          Constants.CollectionName,
-          Constants.CollectionPath,
-          Constants.IndexPath,
-          Constants.InputFormat,
-          Constants.Tokenizer,
-          Constants.DocnoMappingClass,
-          Constants.DocnoOffset };
+  public static final String[] RequiredParameters = { Constants.CollectionName,
+      Constants.CollectionPath, Constants.IndexPath, Constants.InputFormat, Constants.Tokenizer,
+      Constants.DocnoMappingClass, Constants.DocnoOffset };
 
   @Override
   public String[] getRequiredParameters() {
@@ -340,18 +343,20 @@ public class BuildTermDocVectors extends PowerTool {
     LOG.info(String.format(" - %s: %s", Constants.DocnoMappingClass, mappingClass));
     LOG.info(String.format(" - %s: %s", Constants.DocnoOffset, docnoOffset));
     LOG.info(String.format(" - %s: %s", Constants.TermDocVectorSegments, numReducers));
-    LOG.info(String.format(" - %s: %s", Constants.CollectionVocab, conf.get(Constants.CollectionVocab)));
+    LOG.info(String.format(" - %s: %s", Constants.CollectionVocab,
+        conf.get(Constants.CollectionVocab)));
     LOG.info(String.format(" - %s: %s", Constants.StopwordList, conf.get(Constants.StopwordList)));
 
     RetrievalEnvironment env = new RetrievalEnvironment(indexPath, fs);
     Path mappingFile = env.getDocnoMappingData();
 
     if (!fs.exists(mappingFile)) {
-      throw new RuntimeException("Error, docno mapping data file " + mappingFile + " doesn't exist!");
+      throw new RuntimeException("Error, docno mapping data file " + mappingFile
+          + " doesn't exist!");
     }
 
     DistributedCache.addCacheFile(mappingFile.toUri(), conf);
-    DistributedCache.addCacheFile(env.createPath("", conf.get(Constants.TokenizerData)).toUri(), conf);
+    DistributedCache.addCacheFile(new Path(conf.get(Constants.TokenizerData)).toUri(), conf);
 
     Path outputPath = new Path(env.getTermDocVectorsDirectory());
     if (fs.exists(outputPath)) {
@@ -366,12 +371,13 @@ public class BuildTermDocVectors extends PowerTool {
     env.writeTokenizerClass(tokenizer);
     env.writeDocnoOffset(docnoOffset);
 
-    conf.set("mapreduce.task.timeout", "6000000");			// needed for stragglers (e.g., very long documents in Wikipedia)
+    conf.set("mapreduce.task.timeout", "6000000"); // needed for stragglers (e.g., very long
+                                                   // documents in Wikipedia)
     conf.set("mapreduce.map.memory.mb", "3072");
     conf.set("mapreduce.map.java.opts", "-Xmx3072m");
 
-    Job job1 = Job.getInstance(conf,
-        BuildTermDocVectors.class.getSimpleName() + ":" + collectionName);
+    Job job1 = Job.getInstance(conf, BuildTermDocVectors.class.getSimpleName() + ":"
+        + collectionName);
     job1.setJarByClass(BuildTermDocVectors.class);
 
     job1.setNumReduceTasks(numReducers);
@@ -408,7 +414,7 @@ public class BuildTermDocVectors extends PowerTool {
     conf.set(InputPath, env.getDoclengthsDirectory().toString());
     conf.set(DocLengthDataFile, dlFile.toString());
 
-    //conf.set("mapred.child.java.opts", "-Xmx2048m");
+    // conf.set("mapred.child.java.opts", "-Xmx2048m");
     conf.set("mapreduce.map.memory.mb", "2048");
     conf.set("mapreduce.map.java.opts", "-Xmx2048m");
     conf.set("mapreduce.reduce.memory.mb", "2048");
@@ -431,10 +437,9 @@ public class BuildTermDocVectors extends PowerTool {
     job2.waitForCompletion(true);
     LOG.info("Job finished in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
 
-    long collectionSumOfDocLengths =
-        job2.getCounters().findCounter(DocLengths.SumOfDocLengths).getValue();
-    env.writeCollectionAverageDocumentLength(
-        (float) collectionSumOfDocLengths / collectionDocCount);
+    long collectionSumOfDocLengths = job2.getCounters().findCounter(DocLengths.SumOfDocLengths)
+        .getValue();
+    env.writeCollectionAverageDocumentLength((float) collectionSumOfDocLengths / collectionDocCount);
 
     return 0;
   }
