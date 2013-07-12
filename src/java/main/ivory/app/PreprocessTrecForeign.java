@@ -61,9 +61,7 @@ public class PreprocessTrecForeign extends Configured implements Tool {
 
     RetrievalEnvironment env = new RetrievalEnvironment(indexRootPath, fs);
     Path mappingFile = env.getDocnoMappingData();
-    new TrecDocnoMappingBuilder().build(new Path(collection), mappingFile, conf);
-    
-    Log.info("TrecDocnoMappingBuilder Fineshed. Loading conf...");
+    //new TrecDocnoMappingBuilder().build(new Path(collection), mappingFile, conf);
 
     conf.set(Constants.DocnoMappingClass, TrecDocnoMapping.class.getCanonicalName());
     conf.set(Constants.DocnoMappingFile, env.getDocnoMappingData().toString());
@@ -72,20 +70,22 @@ public class PreprocessTrecForeign extends Configured implements Tool {
     conf.setInt(Constants.MaxDf, Integer.MAX_VALUE);
     conf.setInt(Constants.TermIndexWindow, 8);
     conf.set(Constants.InputFormat, TrecDocumentInputFormat.class.getCanonicalName());
+    Log.info(conf.get("mapreduce.reduce.memory.mb"));
+    Log.info(conf.get("mapred.job.reduce.memory.mb"));
     conf.set("mapreduce.map.memory.mb", "3072");
     conf.set("mapreduce.map.java.opts", "-Xmx3072m");
     conf.set("mapreduce.reduce.memory.mb", "3072");
     conf.set("mapreduce.reduce.java.opts", "-Xmx3072m");
 
-    Log.info("Conf loaded...");
+    Log.info(conf.get("mapreduce.reduce.memory.mb"));
 
-    /*new BuildTermDocVectors(conf).run();
-    new ComputeGlobalTermStatistics(conf).run();
-    new BuildDictionary(conf).run();
-    new BuildIntDocVectors(conf).run();
-
-    new BuildIntDocVectorsForwardIndex(conf).run();
-    new BuildTermDocVectorsForwardIndex(conf).run();*/
+    // new BuildTermDocVectors(conf).run();
+    // new ComputeGlobalTermStatistics(conf).run();
+    // new BuildDictionary(conf).run();
+    // new BuildIntDocVectors(conf).run();
+    //
+    // new BuildIntDocVectorsForwardIndex(conf).run();
+    // new BuildTermDocVectorsForwardIndex(conf).run();
 
     return 0;
   }
@@ -102,14 +102,21 @@ public class PreprocessTrecForeign extends Configured implements Tool {
   private Configuration parseArgs(String[] args) {
     Configuration conf = getConf();
     options = new Options();
-    options.addOption(OptionBuilder.withDescription("tokenizer class").withArgName("class").hasArg().isRequired().create(TOKENIZER_CLASS_OPTION));
-    options.addOption(OptionBuilder.withDescription("path to tokenizer model file/directory").withArgName("path").hasArg().create(TOKENIZER_MODEL_OPTION));
-    options.addOption(OptionBuilder.withDescription("path to index directory").withArgName("path").hasArg().isRequired().isRequired().create(INDEX_PATH_OPTION));
-    options.addOption(OptionBuilder.withDescription("path to XML collection file").withArgName("path").hasArg().isRequired().create(INPUT_PATH_OPTION));
-    options.addOption(OptionBuilder.withDescription("two-letter collection language code").withArgName("en|de|fr|zh|es|ar|tr").hasArg().isRequired().create(LANGUAGE_OPTION));
-    options.addOption(OptionBuilder.withDescription("path to stopwords file").withArgName("path").hasArg().create(STOPWORDS_OPTION));
-    options.addOption(OptionBuilder.withDescription("collection name").withArgName("path").hasArg().create(COLLECTION_NAME_OPTION));
-    try{
+    options.addOption(OptionBuilder.withDescription("tokenizer class").withArgName("class")
+        .hasArg().isRequired().create(TOKENIZER_CLASS_OPTION));
+    options.addOption(OptionBuilder.withDescription("path to tokenizer model file/directory")
+        .withArgName("path").hasArg().create(TOKENIZER_MODEL_OPTION));
+    options.addOption(OptionBuilder.withDescription("path to index directory").withArgName("path")
+        .hasArg().isRequired().isRequired().create(INDEX_PATH_OPTION));
+    options.addOption(OptionBuilder.withDescription("path to XML collection file")
+        .withArgName("path").hasArg().isRequired().create(INPUT_PATH_OPTION));
+    options.addOption(OptionBuilder.withDescription("two-letter collection language code")
+        .withArgName("en|de|fr|zh|es|ar|tr").hasArg().isRequired().create(LANGUAGE_OPTION));
+    options.addOption(OptionBuilder.withDescription("path to stopwords file").withArgName("path")
+        .hasArg().create(STOPWORDS_OPTION));
+    options.addOption(OptionBuilder.withDescription("collection name").withArgName("path").hasArg()
+        .create(COLLECTION_NAME_OPTION));
+    try {
 
       FileSystem fs = FileSystem.get(conf);
 
@@ -165,6 +172,7 @@ public class PreprocessTrecForeign extends Configured implements Tool {
 
     return conf;
   }
+
   /**
    * Dispatches command-line arguments to the tool via the {@code ToolRunner}.
    */
