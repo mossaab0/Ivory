@@ -366,8 +366,8 @@ public class BuildTermDocVectors extends PowerTool {
     env.writeDocnoOffset(docnoOffset);
 
     conf.set("mapreduce.task.timeout", "6000000");			// needed for stragglers (e.g., very long documents in Wikipedia)
-    conf.set("mapreduce.map.memory.mb", "3072");
-    conf.set("mapreduce.map.java.opts", "-Xmx3072m");
+    //conf.set("mapreduce.map.memory.mb", "2048");
+    //conf.set("mapreduce.map.java.opts", "-Xmx2048m");
 
     Job job1 = Job.getInstance(conf,
         BuildTermDocVectors.class.getSimpleName() + ":" + collectionName);

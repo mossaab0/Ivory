@@ -52,7 +52,7 @@ public class StanfordChineseTokenizer extends Tokenizer {
       readerWriter = classifier.makeReaderAndWriter();
     } catch (Exception e) {
       e.printStackTrace();
-      throw new RuntimeException("Tokenizer not configured properly!");
+      throw new RuntimeException("Tokenizer not configured properly!" + e.getMessage());
     }
   }
 
