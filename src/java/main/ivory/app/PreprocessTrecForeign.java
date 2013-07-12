@@ -72,10 +72,10 @@ public class PreprocessTrecForeign extends Configured implements Tool {
     conf.set(Constants.InputFormat, TrecDocumentInputFormat.class.getCanonicalName());
     Log.info(conf.get("mapreduce.reduce.memory.mb"));
     Log.info(conf.get("mapred.job.reduce.memory.mb"));
-    conf.set("mapreduce.map.memory.mb", "3072");
-    conf.set("mapreduce.map.java.opts", "-Xmx3072m");
-    conf.set("mapreduce.reduce.memory.mb", "3072");
-    conf.set("mapreduce.reduce.java.opts", "-Xmx3072m");
+    conf.set("mapreduce.map.memory.mb", "4096");
+    conf.set("mapreduce.map.java.opts", "-Xmx4096m");
+    conf.set("mapreduce.reduce.memory.mb", "4096");
+    conf.set("mapreduce.reduce.java.opts", "-Xmx4096m");
 
     Log.info(conf.get("mapreduce.reduce.memory.mb"));
 
