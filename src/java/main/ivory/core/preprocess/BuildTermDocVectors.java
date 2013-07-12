@@ -351,6 +351,7 @@ public class BuildTermDocVectors extends PowerTool {
     }
 
     DistributedCache.addCacheFile(mappingFile.toUri(), conf);
+    DistributedCache.addCacheFile(env.createPath("", conf.get(Constants.TokenizerData)).toUri(), conf);
 
     Path outputPath = new Path(env.getTermDocVectorsDirectory());
     if (fs.exists(outputPath)) {
