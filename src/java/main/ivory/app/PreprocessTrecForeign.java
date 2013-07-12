@@ -78,6 +78,7 @@ public class PreprocessTrecForeign extends Configured implements Tool {
     conf.set("mapreduce.reduce.java.opts", "-Xmx4096m");
 
     Log.info(conf.get("mapreduce.reduce.memory.mb"));
+    Log.info(conf.get("mapred.job.reduce.memory.mb"));
 
     // new BuildTermDocVectors(conf).run();
     // new ComputeGlobalTermStatistics(conf).run();
