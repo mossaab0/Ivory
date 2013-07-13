@@ -356,7 +356,9 @@ public class BuildTermDocVectors extends PowerTool {
     }
 
     DistributedCache.addCacheFile(mappingFile.toUri(), conf);
-    DistributedCache.addCacheFile(new Path(conf.get(Constants.TokenizerData)).toUri(), conf);
+    if (conf.get(Constants.TokenizerData) != null && !conf.get(Constants.TokenizerData).isEmpty()) {
+      DistributedCache.addCacheFile(new Path(conf.get(Constants.TokenizerData)).toUri(), conf);
+    }
 
     Path outputPath = new Path(env.getTermDocVectorsDirectory());
     if (fs.exists(outputPath)) {
@@ -373,8 +375,8 @@ public class BuildTermDocVectors extends PowerTool {
 
     conf.set("mapreduce.task.timeout", "6000000"); // needed for stragglers (e.g., very long
                                                    // documents in Wikipedia)
-    conf.set("mapreduce.map.memory.mb", "3072");
-    conf.set("mapreduce.map.java.opts", "-Xmx3072m");
+    conf.set("mapreduce.map.memory.mb", "4096");
+    conf.set("mapreduce.map.java.opts", "-Xmx4096m");
 
     Job job1 = Job.getInstance(conf, BuildTermDocVectors.class.getSimpleName() + ":"
         + collectionName);
