@@ -66,7 +66,7 @@ public class StanfordChineseTokenizer extends Tokenizer {
       for (List<CoreLabel> doc : classifier.classify(text)) {
         classifier.writeAnswers(doc, new PrintWriter(sw), readerWriter);
       }
-      tokens = sw.toString().replaceAll( "([\\ud800-\\udbff\\udc00-\\udfff])", " ").trim().split("\\s+");
+      tokens = sw.toString().trim().split("\\s+");
     } catch (IOException e) {
       LOG.info("Problem in tokenizing Chinese");
       e.printStackTrace();
