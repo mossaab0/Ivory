@@ -105,8 +105,10 @@ public class BuildIndex extends Configured implements Tool {
 
       conf.setFloat("Ivory.IndexingMapMemoryThreshold", 0.9f);
       conf.setFloat("Ivory.IndexingReduceMemoryThreshold", 0.9f);
-      conf.setInt("Ivory.MaxHeap", 3072);
+      conf.setInt("Ivory.MaxHeap", 4096);
       conf.setInt("Ivory.MaxNDocsBeforeFlush", 50000);
+      conf.set("mapreduce.map.memory.mb", "4096");
+      conf.set("mapreduce.map.java.opts", "-Xmx4096m");
 
       new BuildLPInvertedIndexDocSorted(conf).run();
       new BuildIntPostingsForwardIndex(conf).run();
