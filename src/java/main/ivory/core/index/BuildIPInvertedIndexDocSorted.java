@@ -279,9 +279,9 @@ public class BuildIPInvertedIndexDocSorted extends PowerTool {
 
     conf.setInt("mapred.min.split.size", minSplitSize);
     //conf.set("mapred.child.java.opts", "-Xmx" + maxHeap + "m");
-    conf.set("mapreduce.map.memory.mb", "12288");
-    conf.set("mapreduce.map.java.opts", "-Xmx12288m");
-    conf.set("mapreduce.reduce.memory.mb", "12288");
+    conf.set("mapreduce.map.memory.mb", "10240");
+    conf.set("mapreduce.map.java.opts", "-Xmx10240m");
+    conf.set("mapreduce.reduce.memory.mb", "10240");
     conf.set("mapreduce.reduce.java.opts", "-Xmx12288m");
 
     Job job = Job.getInstance(conf,
