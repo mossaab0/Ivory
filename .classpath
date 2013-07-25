@@ -65,8 +65,6 @@
 	<classpathentry kind="lib" path="lib/kfs-0.3.jar"/>
 	<classpathentry kind="lib" path="lib/logback-classic-1.0.9.jar"/>
 	<classpathentry kind="lib" path="lib/logback-core-1.0.9.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-analyzers-3.5.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-core-3.5.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.4.5.jar"/>
 	<classpathentry kind="lib" path="lib/maxent-3.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/mockito-all-1.8.5.jar"/>
@@ -92,7 +90,7 @@
 	<classpathentry kind="lib" path="lib/xmlenc-0.52.jar"/>
 	<classpathentry kind="lib" path="lib/ant-1.6.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/guava-13.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/guava-13.0.1.jar" sourcepath="/home/mossaab/.m2/repository/com/google/guava/guava/13.0.1/guava-13.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jasper-compiler-5.5.12.jar"/>
 	<classpathentry kind="lib" path="lib/spymemcached-2.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/avro-1.7.4.jar"/>
@@ -113,5 +111,7 @@
 	<classpathentry kind="lib" path="lib/xz-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="lib/stanford-segmenter-2013-06-20.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-analyzers-2.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-core-2.9.4.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

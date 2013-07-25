@@ -94,9 +94,9 @@ public class LuceneAnalyzer extends ivory.core.tokenize.Tokenizer {
   
   @Override
   public String[] processContent(String text) {  
-    tokenizer = new StandardTokenizer(Version.LUCENE_35, new StringReader(text));
-    TokenStream tokenStream = new StandardFilter(Version.LUCENE_35, tokenizer);
-    tokenStream = new LowerCaseFilter(Version.LUCENE_35, tokenStream);
+    tokenizer = new StandardTokenizer(Version.LUCENE_29, new StringReader(text));
+    TokenStream tokenStream = new StandardFilter(tokenizer);
+    tokenStream = new LowerCaseFilter(tokenStream);
     String tokenized = postNormalize(streamToString(tokenStream));
 
     StringBuilder finalTokenized = new StringBuilder();
@@ -126,9 +126,9 @@ public class LuceneAnalyzer extends ivory.core.tokenize.Tokenizer {
   @Override
   public float getOOVRate(String text, VocabularyWritable vocab) {
     int countOOV = 0, countAll = 0;
-    tokenizer = new StandardTokenizer(Version.LUCENE_35, new StringReader(text));
-    TokenStream tokenStream = new StandardFilter(Version.LUCENE_35, tokenizer);
-    tokenStream = new LowerCaseFilter(Version.LUCENE_35, tokenStream);
+    tokenizer = new StandardTokenizer(Version.LUCENE_29, new StringReader(text));
+    TokenStream tokenStream = new StandardFilter(tokenizer);
+    tokenStream = new LowerCaseFilter(tokenStream);
     String tokenized = postNormalize(streamToString(tokenStream));
 
     for (String token : tokenized.split(" ")) {

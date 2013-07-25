@@ -38,7 +38,9 @@ import org.apache.hadoop.fs.Path;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.util.Attribute;
+
 import edu.umd.hooka.VocabularyWritable;
 
 public abstract class Tokenizer {
@@ -195,7 +197,7 @@ public abstract class Tokenizer {
    *    String corresponding to the tokens output by tokenStream
    */
   protected static String streamToString(TokenStream tokenStream) {
-    CharTermAttribute termAtt = tokenStream.getAttribute(CharTermAttribute.class);
+    Attribute termAtt = tokenStream.getAttribute(TermAttribute.class);
     tokenStream.clearAttributes();
     StringBuilder tokenized = new StringBuilder();
     try {
