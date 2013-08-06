@@ -83,7 +83,6 @@ public class CalimaAnalyzer extends ivory.core.tokenize.Tokenizer {
     StringBuilder sb = new StringBuilder();
 
     for (String token : text.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")) {
-      System.out.println(token);
       sb.append(token).append(" ");
     }
 
