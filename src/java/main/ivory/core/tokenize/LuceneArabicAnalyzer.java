@@ -15,7 +15,7 @@ import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.ar.ArabicNormalizationFilter;
 import org.apache.lucene.analysis.ar.ArabicStemFilter;
-import org.apache.lucene.analysis.standard.StandardFilter;
+import org.apache.lucene.analysis.standard.UMDStandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.util.Attribute;
@@ -110,7 +110,7 @@ public class LuceneArabicAnalyzer extends ivory.core.tokenize.Tokenizer {
   public float getOOVRate(String text, VocabularyWritable vocab) {
     int countOOV = 0, countAll = 0;
     tokenizer = new StandardTokenizer(Version.LUCENE_29,new StringReader(text));
-    TokenStream tokenStream = new StandardFilter(tokenizer);
+    TokenStream tokenStream = new UMDStandardFilter(tokenizer);
     tokenStream = new LowerCaseFilter(tokenStream);
     String tokenized = postNormalize(streamToString(tokenStream));
 

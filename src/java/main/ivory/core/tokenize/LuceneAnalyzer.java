@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.standard.StandardFilter;
+import org.apache.lucene.analysis.standard.UMDStandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.util.Version;
 import edu.umd.hooka.VocabularyWritable;
@@ -95,7 +95,7 @@ public class LuceneAnalyzer extends ivory.core.tokenize.Tokenizer {
   @Override
   public String[] processContent(String text) {  
     tokenizer = new StandardTokenizer(Version.LUCENE_29, new StringReader(text));
-    TokenStream tokenStream = new StandardFilter(tokenizer);
+    TokenStream tokenStream = new UMDStandardFilter(tokenizer);
     tokenStream = new LowerCaseFilter(tokenStream);
     String tokenized = postNormalize(streamToString(tokenStream));
 
@@ -127,7 +127,7 @@ public class LuceneAnalyzer extends ivory.core.tokenize.Tokenizer {
   public float getOOVRate(String text, VocabularyWritable vocab) {
     int countOOV = 0, countAll = 0;
     tokenizer = new StandardTokenizer(Version.LUCENE_29, new StringReader(text));
-    TokenStream tokenStream = new StandardFilter(tokenizer);
+    TokenStream tokenStream = new UMDStandardFilter(tokenizer);
     tokenStream = new LowerCaseFilter(tokenStream);
     String tokenized = postNormalize(streamToString(tokenStream));
 
