@@ -72,10 +72,9 @@ public class PreprocessTrecForeign extends Configured implements Tool {
     conf.set(Constants.InputFormat, TrecDocumentInputFormat.class.getCanonicalName());
 
     //new BuildTermDocVectors(conf).run();
-    
-    new ComputeGlobalTermStatistics(conf).run();
-    /*new BuildDictionary(conf).run();
-    new BuildIntDocVectors(conf).run();
+    //new ComputeGlobalTermStatistics(conf).run();
+    new BuildDictionary(conf).run();
+    /*new BuildIntDocVectors(conf).run();
 
     new BuildIntDocVectorsForwardIndex(conf).run();
     new BuildTermDocVectorsForwardIndex(conf).run();*/
