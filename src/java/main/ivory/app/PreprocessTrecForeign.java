@@ -61,7 +61,7 @@ public class PreprocessTrecForeign extends Configured implements Tool {
 
     RetrievalEnvironment env = new RetrievalEnvironment(indexRootPath, fs);
     Path mappingFile = env.getDocnoMappingData();
-    //new TrecDocnoMappingBuilder().build(new Path(collection), mappingFile, conf);
+    new TrecDocnoMappingBuilder().build(new Path(collection), mappingFile, conf);
 
     conf.set(Constants.DocnoMappingClass, TrecDocnoMapping.class.getCanonicalName());
     conf.set(Constants.DocnoMappingFile, env.getDocnoMappingData().toString());
@@ -75,7 +75,7 @@ public class PreprocessTrecForeign extends Configured implements Tool {
     //new ComputeGlobalTermStatistics(conf).run();
     //new BuildDictionary(conf).run();
     //new BuildIntDocVectors(conf).run();
-    new BuildIntDocVectorsForwardIndex(conf).run();
+    //new BuildIntDocVectorsForwardIndex(conf).run();
     
     //new BuildTermDocVectorsForwardIndex(conf).run();
 
