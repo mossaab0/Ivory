@@ -70,6 +70,11 @@ public class PreprocessTrecForeign extends Configured implements Tool {
     conf.setInt(Constants.MaxDf, Integer.MAX_VALUE);
     conf.setInt(Constants.TermIndexWindow, 8);
     conf.set(Constants.InputFormat, TrecDocumentInputFormat.class.getCanonicalName());
+    
+    conf.set("mapreduce.map.memory.mb", "4096");
+    conf.set("mapreduce.map.java.opts", "-Xmx4096m");
+    conf.set("mapreduce.reduce.memory.mb", "4096");
+    conf.set("mapreduce.reduce.java.opts", "-Xmx4096m");
 
     new BuildTermDocVectors(conf).run();
     new ComputeGlobalTermStatistics(conf).run();
