@@ -11,24 +11,23 @@ import org.apache.hadoop.io.Writable;
 
 /**
  * <p>
- * Program that reads either a SequenceFile or a directory containing
- * SequenceFiles. A maximum number of key-value pairs to read must be specified;
- * in the of a directory, the value specifies the number of key-value pairs to
- * read <i>per file</i>.
+ * Program that reads either a SequenceFile or a directory containing SequenceFiles. A maximum
+ * number of key-value pairs to read must be specified; in the of a directory, the value specifies
+ * the number of key-value pairs to read <i>per file</i>.
  * </p>
- *
+ * 
  * <pre>
  * args: [path] [max-num-of-records] (local)
  * </pre>
- *
+ * 
  * <p>
- * Note: specify "local" as the optional third argument for reading from local
- * disk.
+ * Note: specify "local" as the optional third argument for reading from local disk.
  * </p>
  */
 public class ReadSequenceFile {
 
-  private ReadSequenceFile() {}
+  private ReadSequenceFile() {
+  }
 
   public static void main(String[] args) throws IOException {
     if (args.length < 1) {
@@ -49,7 +48,8 @@ public class ReadSequenceFile {
       System.out.println("Reading from local filesystem");
     }
 
-    FileSystem fs = useLocal? FileSystem.getLocal(new Configuration()) : FileSystem.get(new Configuration());
+    FileSystem fs = useLocal ? FileSystem.getLocal(new Configuration()) : FileSystem
+        .get(new Configuration());
     Path p = new Path(f);
 
     if (fs.getFileStatus(p).isDir()) {
@@ -99,7 +99,7 @@ public class ReadSequenceFile {
     try {
       FileStatus[] stat = fs.listStatus(path);
       for (int i = 0; i < stat.length; ++i) {
-        n += readSequenceFile(stat[i].getPath(), fs ,max);
+        n += readSequenceFile(stat[i].getPath(), fs, max);
       }
     } catch (IOException e) {
       e.printStackTrace();
